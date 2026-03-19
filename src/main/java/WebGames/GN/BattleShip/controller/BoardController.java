@@ -1,6 +1,7 @@
 package WebGames.GN.BattleShip.controller;
 
 import WebGames.GN.BattleShip.CellState;
+import WebGames.GN.BattleShip.dto.ShipPlacementDto;
 import WebGames.GN.BattleShip.service.BoardService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,5 +24,10 @@ public class BoardController {
     public CellState getCellStateByLocation(@PathVariable int row,
                                             @PathVariable int column){
         return boardService.getCellStateByLocation(row, column);
+    }
+
+    @PutMapping("/shipPlacement/")
+    public void placementOfShips(@RequestBody ShipPlacementDto shipPlacementDto){
+        boardService.placementOfShips(shipPlacementDto);
     }
 }

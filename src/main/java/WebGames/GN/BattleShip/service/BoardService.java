@@ -1,7 +1,11 @@
 package WebGames.GN.BattleShip.service;
 
 import WebGames.GN.BattleShip.CellState;
+import WebGames.GN.BattleShip.dto.ShipPlacementDto;
+import WebGames.GN.BattleShip.helper.Helper;
 import org.springframework.stereotype.Service;
+
+import java.util.Scanner;
 
 @Service
 public class BoardService {
@@ -41,5 +45,37 @@ public class BoardService {
         else{
             return CellState.ALREADY_USED;
         }
+    }
+
+    public void placementOfShips(ShipPlacementDto shipPlacementDto) {
+        int row = shipPlacementDto.getRow();
+        int column = shipPlacementDto.getColumn();
+        int currentShip = shipPlacementDto.getShipNumber();
+        int shipSize = switch (currentShip) {
+            case 5 -> 5;
+            case 4 -> 4;
+            case 2, 3 -> 3;
+            case 1 -> 2;
+            default -> -1;
+        };
+
+        if (shipPlacementDto.isHorizontal()){
+            for (int r = 0; r < shipSize; r++){
+                if (!(board[row+r][column] == CellState.EMPTY)){
+                    System.out.println("Placement overlaps with other ships or is out of bounds at: [" +
+                            (row+r) + "]:[" + column + "]");
+                    return;
+                }
+            }
+        } else {
+            for (int c = 0; c < shipSize; c++){
+                if (!(board[row][column+c] == CellState.EMPTY)){
+                    System.out.println("Placement overlaps with other ships or is out of bounds at: [" +
+                            row + "]:[" + (column+c) + "]");
+                    return;
+                }
+            }
+        }
+
     }
 }
