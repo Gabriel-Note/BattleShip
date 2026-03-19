@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: BattleShip
+
+  datasource:
+    # 1. Added ?serverTimezone=UTC for stable connection
+    url: jdbc:mysql://localhost:3310/battle?serverTimezone=UTC
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate: # 2. Explicitly tell Hibernate to manage tables
+      ddl-auto: update
+    # 3. Explicitly set the SQL dialect for MySQL 8
+    database-platform: org.hibernate.dialect.MySQLDialect # Use the generic one for better compatibility
+
+    show-sql: true # Helpful for students to see the SQL being executed
