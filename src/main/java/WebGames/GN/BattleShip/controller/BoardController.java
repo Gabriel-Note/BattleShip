@@ -2,10 +2,7 @@ package WebGames.GN.BattleShip.controller;
 
 import WebGames.GN.BattleShip.CellState;
 import WebGames.GN.BattleShip.service.BoardService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/board")
@@ -16,9 +13,15 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @PutMapping("/{row}{column}")
+    @PutMapping("/{row}-{column}")
     public CellState setCellStateByLocation(@PathVariable int row,
                                             @PathVariable int column){
         return boardService.setCellStateByLocation(row, column);
+    }
+
+    @GetMapping("/{row}-{column}")
+    public CellState getCellStateByLocation(@PathVariable int row,
+                                            @PathVariable int column){
+        return boardService.getCellStateByLocation(row, column);
     }
 }
