@@ -86,6 +86,7 @@ public class BoardService {
         int row = shipPlacementDto.getRow();
         int column = shipPlacementDto.getColumn();
         int currentShip = shipPlacementDto.getShipNumber();
+        CellState[][] board = selectBoard(shipPlacementDto.getPlayer());
         int shipSize = switch (currentShip) {
             case 5 -> 5;
             case 4 -> 4;
