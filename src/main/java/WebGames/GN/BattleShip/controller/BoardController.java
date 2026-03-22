@@ -26,8 +26,13 @@ public class BoardController {
         return boardService.getCellStateByLocation(row, column);
     }
 
-    @PutMapping("/shipPlacement/")
-    public void placementOfShips(@RequestBody ShipPlacementDto shipPlacementDto){
-        boardService.placementOfShips(shipPlacementDto);
+    @PutMapping("/shipPlacement")
+    public String placementOfShips(@RequestBody ShipPlacementDto shipPlacementDto){
+        return boardService.placementOfShips(shipPlacementDto);
+    }
+
+    @PutMapping("/clearBoard")
+    public void clearBoard(){
+        boardService.clearBoard();
     }
 }
