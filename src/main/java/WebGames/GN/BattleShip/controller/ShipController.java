@@ -1,3 +1,4 @@
+/*
 package WebGames.GN.BattleShip.controller;
 
 import WebGames.GN.BattleShip.dto.ShipDto;
@@ -32,3 +33,4 @@ public class ShipController {
         return shipDtoList;
     }
 }
+*/
