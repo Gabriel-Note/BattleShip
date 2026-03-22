@@ -1,9 +1,14 @@
 package WebGames.GN.BattleShip.service;
 
 import WebGames.GN.BattleShip.CellState;
+import WebGames.GN.BattleShip.dto.PlayerTurnDto;
 import WebGames.GN.BattleShip.dto.ShipPlacementDto;
 import WebGames.GN.BattleShip.helper.Message;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Scanner;
 
@@ -11,6 +16,8 @@ import java.util.Scanner;
 public class BoardService {
     private int gridSize = 10;
     private CellState[][] board = new CellState[gridSize][gridSize];
+    private CellState[][] playerOneBoard = new CellState[gridSize][gridSize];
+    private CellState[][] playerTwoBoard = new CellState[gridSize][gridSize];
     private int healthOfShips = 17;
 
     public BoardService() {
@@ -33,7 +40,19 @@ public class BoardService {
         return board;
     }
 
-    public CellState setCellStateByLocation(int row, int column){
+    public CellState setCellStateByPlayer(PlayerTurnDto playerTurnDto){
+        int row = playerTurnDto.getRow();
+        int column = playerTurnDto.getColumn();
+        int player = playerTurnDto.getPlayerNumber();
+        CellState[][] board = switch (player){
+            case 1 -> playerOneBoard;
+            case 2 -> playerTwoBoard;
+            default -> throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
+        };
+        return setCellStateByLocation(row, column, board);
+    }
+
+    private CellState setCellStateByLocation(int row, int column, CellState[][] board){
         Enum<CellState> currentCell = board[row][column];
         if (currentCell == CellState.EMPTY){
             board[row][column] = CellState.MISS;
