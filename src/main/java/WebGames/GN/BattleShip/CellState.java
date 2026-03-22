@@ -4,5 +4,7 @@ public enum CellState {
     EMPTY,
     SHIP,
     HIT,
-    MISS
+    MISS,
+    ALREADY_USED,
+    ALL_SHIPS_HIT
 }
