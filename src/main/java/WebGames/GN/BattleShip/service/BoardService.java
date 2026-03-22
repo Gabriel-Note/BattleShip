@@ -12,10 +12,8 @@ public class BoardService {
     private int gridSize = 10;
     private CellState[][] board = new CellState[gridSize][gridSize];
     private int healthOfShips = 17;
-    private final ShipService shipService;
 
-    public BoardService(ShipService shipService) {
-        this.shipService = shipService;
+    public BoardService() {
         clearBoard();
     }
 
