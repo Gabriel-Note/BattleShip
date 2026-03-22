@@ -3,6 +3,7 @@ package WebGames.GN.BattleShip.controller;
 import WebGames.GN.BattleShip.CellState;
 import WebGames.GN.BattleShip.dto.ShipPlacementDto;
 import WebGames.GN.BattleShip.service.BoardService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +25,11 @@ public class BoardController {
     public CellState getCellStateByLocation(@PathVariable int row,
                                             @PathVariable int column){
         return boardService.getCellStateByLocation(row, column);
+    }
+
+    @GetMapping("/getBoard")
+    public ResponseEntity<CellState[][]> getBoard(){
+        return ResponseEntity.ok(boardService.getBoard());
     }
 
     @PutMapping("/shipPlacement")
