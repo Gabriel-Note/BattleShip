@@ -31,6 +31,10 @@ public class BoardService {
         }
     }
 
+    public CellState[][] getBoard(){
+        return board;
+    }
+
     public CellState setCellStateByLocation(int row, int column){
         Enum<CellState> currentCell = board[row][column];
         if (currentCell == CellState.EMPTY){
