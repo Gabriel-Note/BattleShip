@@ -4,4 +4,8 @@ public class Message {
     public static String outOfBounds(){
         return "out of bounds";
     }
+    public static String playerNotFound(){
+        return "PlayerNotFound";
+    }
+
 }

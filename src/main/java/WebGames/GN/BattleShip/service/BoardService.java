@@ -21,19 +21,35 @@ public class BoardService {
     private int healthOfShips = 17;
 
     public BoardService() {
-        clearBoard();
+        clearAllBoards();
     }
 
-    public CellState getCellStateByLocation(int row, int column){
-        return board[row][column];
+    public CellState getCellStateByPlayer(PlayerTurnDto playerTurnDto){
+        CellState[][] board = selectBoard(playerTurnDto.getPlayerNumber());
+        return board[playerTurnDto.getRow()][playerTurnDto.getColumn()];
     }
 
-    public void clearBoard(){
+    private CellState[][] selectBoard(int player){
+        return switch (player){
+            case 1 -> playerOneBoard;
+            case 2 -> playerTwoBoard;
+            default -> throw new ResponseStatusException(HttpStatus.NOT_FOUND, Message.playerNotFound());
+        };
+    }
+
+    public void clearBoard(int player){
+        CellState[][] board = selectBoard(player);
+
         for (int row = 0; row < gridSize; row++){
             for (int column = 0; column < gridSize; column++){
                 board[row][column] = CellState.EMPTY;
             }
         }
+    }
+
+    public void clearAllBoards(){
+        clearBoard(1);
+        clearBoard(2);
     }
 
     public CellState[][] getBoard(){
@@ -43,12 +59,7 @@ public class BoardService {
     public CellState setCellStateByPlayer(PlayerTurnDto playerTurnDto){
         int row = playerTurnDto.getRow();
         int column = playerTurnDto.getColumn();
-        int player = playerTurnDto.getPlayerNumber();
-        CellState[][] board = switch (player){
-            case 1 -> playerOneBoard;
-            case 2 -> playerTwoBoard;
-            default -> throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
-        };
+        CellState[][] board = selectBoard(playerTurnDto.getPlayerNumber());
         return setCellStateByLocation(row, column, board);
     }
 
