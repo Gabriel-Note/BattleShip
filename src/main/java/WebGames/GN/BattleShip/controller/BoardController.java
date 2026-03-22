@@ -16,15 +16,14 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @PutMapping("/{row}-{column}")
+    @PutMapping
     public CellState setCellStateByLocation(@RequestBody PlayerTurnDto playerTurnDto){
         return boardService.setCellStateByPlayer(playerTurnDto);
     }
 
-    @GetMapping("/{row}-{column}")
-    public CellState getCellStateByLocation(@PathVariable int row,
-                                            @PathVariable int column){
-        return boardService.getCellStateByLocation(row, column);
+    @GetMapping
+    public CellState getCellStateByLocation(@RequestBody PlayerTurnDto playerTurnDt){
+        return boardService.getCellStateByPlayer(playerTurnDt);
     }
 
     @GetMapping("/getBoard")
@@ -38,7 +37,12 @@ public class BoardController {
     }
 
     @PutMapping("/clearBoard")
-    public void clearBoard(){
-        boardService.clearBoard();
+    public void clearBoard(@PathVariable int player){
+        boardService.clearBoard(player);
+    }
+
+    @PutMapping("/newGame")
+    public void clearAllBoards(){
+        boardService.clearAllBoards();
     }
 }
