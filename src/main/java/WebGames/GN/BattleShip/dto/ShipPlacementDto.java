@@ -5,6 +5,7 @@ public class ShipPlacementDto {
     private int row;
     private int column;
     private boolean vertical;
+    private int player;
 
     public ShipPlacementDto() {
     }
@@ -39,5 +40,13 @@ public class ShipPlacementDto {
 
     public void setVertical(boolean vertical) {
         this.vertical = vertical;
+    }
+
+    public int getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(int player) {
+        this.player = player;
     }
 }
