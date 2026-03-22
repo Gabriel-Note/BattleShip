@@ -38,6 +38,6 @@ public class ShipPlacementDto {
     }
 
     public void setVertical(boolean vertical) {
-        isVertical = vertical;
+        this.isVertical = vertical;
     }
 }
