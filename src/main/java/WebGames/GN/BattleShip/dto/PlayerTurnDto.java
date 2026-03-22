@@ -4,6 +4,7 @@ public class PlayerTurnDto {
     int row;
     int column;
     int playerNumber;
+    int boardToHitNumber;
 
     public PlayerTurnDto() {
     }
@@ -30,5 +31,13 @@ public class PlayerTurnDto {
 
     public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
+    }
+
+    public int getBoardToHitNumber() {
+        return boardToHitNumber;
+    }
+
+    public void setBoardToHitNumber(int boardToHitNumber) {
+        this.boardToHitNumber = boardToHitNumber;
     }
 }
