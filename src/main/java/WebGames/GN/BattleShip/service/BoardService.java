@@ -2,7 +2,7 @@ package WebGames.GN.BattleShip.service;
 
 import WebGames.GN.BattleShip.CellState;
 import WebGames.GN.BattleShip.dto.ShipPlacementDto;
-import WebGames.GN.BattleShip.helper.Helper;
+import WebGames.GN.BattleShip.helper.Message;
 import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
@@ -16,16 +16,19 @@ public class BoardService {
 
     public BoardService(ShipService shipService) {
         this.shipService = shipService;
+        clearBoard();
+    }
 
+    public CellState getCellStateByLocation(int row, int column){
+        return board[row][column];
+    }
+
+    public void clearBoard(){
         for (int row = 0; row < gridSize; row++){
             for (int column = 0; column < gridSize; column++){
                 board[row][column] = CellState.EMPTY;
             }
         }
-    }
-
-    public CellState getCellStateByLocation(int row, int column){
-        return board[row][column];
     }
 
     public CellState setCellStateByLocation(int row, int column){
@@ -47,7 +50,7 @@ public class BoardService {
         }
     }
 
-    public void placementOfShips(ShipPlacementDto shipPlacementDto) {
+    public String placementOfShips(ShipPlacementDto shipPlacementDto) {
         int row = shipPlacementDto.getRow();
         int column = shipPlacementDto.getColumn();
         int currentShip = shipPlacementDto.getShipNumber();
@@ -59,23 +62,35 @@ public class BoardService {
             default -> -1;
         };
 
-        if (shipPlacementDto.isHorizontal()){
+        if (shipPlacementDto.isVertical()){
             for (int r = 0; r < shipSize; r++){
-                if (!(board[row+r][column] == CellState.EMPTY)){
-                    System.out.println("Placement overlaps with other ships or is out of bounds at: [" +
-                            (row+r) + "]:[" + column + "]");
-                    return;
+                try{
+                    if (!(board[row+r][column] == CellState.EMPTY)){
+                        return "Placement overlaps with another ship at: [" +
+                                (row+r) + "]:[" + column + "]";
+                    }
+                }catch (IndexOutOfBoundsException e){
+                    return Message.outOfBounds() + ": " + e.getMessage();
                 }
+            }
+            for (int r = 0; r < shipSize; r++){
+                board[row+r][column] = CellState.SHIP;
             }
         } else {
             for (int c = 0; c < shipSize; c++){
-                if (!(board[row][column+c] == CellState.EMPTY)){
-                    System.out.println("Placement overlaps with other ships or is out of bounds at: [" +
-                            row + "]:[" + (column+c) + "]");
-                    return;
+                try{
+                    if (!(board[row][column+c] == CellState.EMPTY)){
+                        return "Placement overlaps with another ship at: [" +
+                                row + "]:[" + (column+c) + "]";
+                    }
+                }catch (IndexOutOfBoundsException e){
+                    return Message.outOfBounds() + ": " + e.getMessage();
                 }
             }
+            for (int c = 0; c < shipSize; c++){
+                board[row][column+c] = CellState.SHIP;
+            }
         }
-
+        return "Ship placed";
     }
 }
