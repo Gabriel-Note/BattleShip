@@ -4,7 +4,7 @@ public class ShipPlacementDto {
     private int shipNumber;
     private int row;
     private int column;
-    private boolean isVertical;
+    private boolean vertical;
 
     public ShipPlacementDto() {
     }
@@ -34,10 +34,10 @@ public class ShipPlacementDto {
     }
 
     public boolean isVertical() {
-        return isVertical;
+        return vertical;
     }
 
     public void setVertical(boolean vertical) {
-        this.isVertical = vertical;
+        this.vertical = vertical;
     }
 }
