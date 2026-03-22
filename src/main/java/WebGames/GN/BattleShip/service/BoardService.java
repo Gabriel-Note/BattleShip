@@ -52,14 +52,14 @@ public class BoardService {
         clearBoard(2);
     }
 
-    public CellState[][] getBoard(){
-        return board;
+    public CellState[][] getBoard(int player){
+        return selectBoard(player);
     }
 
     public CellState setCellStateByPlayer(PlayerTurnDto playerTurnDto){
         int row = playerTurnDto.getRow();
         int column = playerTurnDto.getColumn();
-        CellState[][] board = selectBoard(playerTurnDto.getPlayerNumber());
+        CellState[][] board = selectBoard(playerTurnDto.getBoardToHitNumber());
         return setCellStateByLocation(row, column, board);
     }
 

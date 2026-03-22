@@ -26,9 +26,9 @@ public class BoardController {
         return boardService.getCellStateByPlayer(playerTurnDt);
     }
 
-    @GetMapping("/getBoard")
-    public ResponseEntity<CellState[][]> getBoard(){
-        return ResponseEntity.ok(boardService.getBoard());
+    @GetMapping("/getBoard{player}")
+    public ResponseEntity<CellState[][]> getBoard(@PathVariable int player){
+        return ResponseEntity.ok(boardService.getBoard(player));
     }
 
     @PutMapping("/shipPlacement")
@@ -36,7 +36,7 @@ public class BoardController {
         return boardService.placementOfShips(shipPlacementDto);
     }
 
-    @PutMapping("/clearBoard")
+    @PutMapping("/clearBoard{player}")
     public void clearBoard(@PathVariable int player){
         boardService.clearBoard(player);
     }
