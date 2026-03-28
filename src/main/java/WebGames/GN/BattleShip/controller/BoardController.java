@@ -17,7 +17,7 @@ public class BoardController {
     }
 
     @PutMapping
-    public CellState setCellStateByLocation(@RequestBody PlayerTurnDto playerTurnDto){
+    public CellState fireAtSpecificPlayer(@RequestBody PlayerTurnDto playerTurnDto){
         return boardService.setCellStateByPlayer(playerTurnDto);
     }
 
@@ -28,22 +28,22 @@ public class BoardController {
 
     @GetMapping("/getBoard{player}")
     @CrossOrigin(origins = "http://127.0.0.1:5500")
-    public ResponseEntity<CellState[][]> getBoard(@PathVariable int player){
+    public ResponseEntity<CellState[][]> getBoardForSpecificPlayer(@PathVariable int player){
         return ResponseEntity.ok(boardService.getBoard(player));
     }
 
     @PutMapping("/shipPlacement")
-    public String placementOfShips(@RequestBody ShipPlacementDto shipPlacementDto){
+    public String placeShipsForSpecificPlayer(@RequestBody ShipPlacementDto shipPlacementDto){
         return boardService.placementOfShips(shipPlacementDto);
     }
 
     @PutMapping("/clearBoard{player}")
-    public void clearBoard(@PathVariable int player){
+    public void resetBoardForSpecificPlayer(@PathVariable int player){
         boardService.clearBoard(player);
     }
 
     @PutMapping("/newGame")
-    public void clearAllBoards(){
+    public void newGame(){
         boardService.clearAllBoards();
     }
 }
