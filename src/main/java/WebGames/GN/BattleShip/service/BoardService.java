@@ -15,7 +15,6 @@ import java.util.Scanner;
 @Service
 public class BoardService {
     private int gridSize = 10;
-    private CellState[][] board = new CellState[gridSize][gridSize];
     private CellState[][] playerOneBoard = new CellState[gridSize][gridSize];
     private CellState[][] playerTwoBoard = new CellState[gridSize][gridSize];
     private int healthOfShips = 17;
