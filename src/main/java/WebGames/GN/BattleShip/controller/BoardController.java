@@ -27,6 +27,7 @@ public class BoardController {
     }
 
     @GetMapping("/getBoard{player}")
+    @CrossOrigin(origins = "http://127.0.0.1:5500")
     public ResponseEntity<CellState[][]> getBoard(@PathVariable int player){
         return ResponseEntity.ok(boardService.getBoard(player));
     }
