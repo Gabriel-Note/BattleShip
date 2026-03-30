@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/board")
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class BoardController {
     private final BoardService boardService;
 
@@ -27,14 +28,13 @@ public class BoardController {
     }
 
     @GetMapping("/getBoard{player}")
-    @CrossOrigin(origins = "http://127.0.0.1:5500")
     public ResponseEntity<CellState[][]> getBoardForSpecificPlayer(@PathVariable int player){
         return ResponseEntity.ok(boardService.getBoard(player));
     }
 
     @PutMapping("/shipPlacement")
-    public String placeShipsForSpecificPlayer(@RequestBody ShipPlacementDto shipPlacementDto){
-        return boardService.placementOfShips(shipPlacementDto);
+    public ResponseEntity<String> placeShipsForSpecificPlayer(@RequestBody ShipPlacementDto shipPlacementDto){
+        return ResponseEntity.ok(boardService.placementOfShips(shipPlacementDto));
     }
 
     @PutMapping("/clearBoard{player}")
