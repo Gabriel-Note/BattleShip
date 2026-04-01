@@ -1,11 +1,15 @@
 package WebGames.GN.BattleShip.service;
 
 import WebGames.GN.BattleShip.CellState;
+import WebGames.GN.BattleShip.Mode;
+import WebGames.GN.BattleShip.dto.GameStateDto;
 import WebGames.GN.BattleShip.dto.PlayerTurnDto;
 import WebGames.GN.BattleShip.dto.ShipPlacementDto;
 import WebGames.GN.BattleShip.helper.Message;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,10 +21,21 @@ public class BoardService {
     private int gridSize = 10;
     private CellState[][] playerOneBoard = new CellState[gridSize][gridSize];
     private CellState[][] playerTwoBoard = new CellState[gridSize][gridSize];
+    private int playerTurn;
+    public int currentShip;
+    public Mode currentMode;
     private int healthOfShips = 17;
 
     public BoardService() {
-        clearAllBoards();
+        resetGameStateAndBoard();
+    }
+
+    public void resetGameStateAndBoard(){
+        clearBoard(1);
+        clearBoard(2);
+        playerTurn = 1;
+        currentShip = 5;
+        currentMode = Mode.PLACEMENT;
     }
 
     public CellState getCellStateByPlayer(PlayerTurnDto playerTurnDto){
@@ -46,20 +61,31 @@ public class BoardService {
         }
     }
 
-    public void clearAllBoards(){
-        clearBoard(1);
-        clearBoard(2);
-    }
+
 
     public CellState[][] getBoard(int player){
         return selectBoard(player);
     }
 
     public CellState setCellStateByPlayer(PlayerTurnDto playerTurnDto){
+        if (playerTurn == playerTurnDto.getPlayerNumber()){
+            throw new RuntimeException("wrong turn");
+        }
         int row = playerTurnDto.getRow();
         int column = playerTurnDto.getColumn();
-        CellState[][] board = selectBoard(playerTurnDto.getBoardToHitNumber());
-        return setCellStateByLocation(row, column, board);
+        CellState[][] board = selectBoard(playerTurnDto.getPlayerNumber());
+        CellState cellState = setCellStateByLocation(row, column, board);
+        if (cellState != CellState.ALREADY_USED){
+            switchPlayer(playerTurn);
+        }
+        return cellState;
+    }
+
+    private void switchPlayer(int player){
+        switch (player) {
+            case 1 -> playerTurn = 2;
+            case 2 -> playerTurn = 1;
+        }
     }
 
     private CellState setCellStateByLocation(int row, int column, CellState[][] board){
@@ -82,11 +108,14 @@ public class BoardService {
     }
 
     public String placementOfShips(ShipPlacementDto shipPlacementDto) {
+        if (shipPlacementDto.getPlayer() != playerTurn){
+            return "not your turn";
+        }
         int row = shipPlacementDto.getRow();
         int column = shipPlacementDto.getColumn();
-        int currentShip = shipPlacementDto.getShipNumber();
+        int activeShip = shipPlacementDto.getShipNumber();
         CellState[][] board = selectBoard(shipPlacementDto.getPlayer());
-        int shipSize = switch (currentShip) {
+        int shipSize = switch (activeShip) {
             case 5 -> 5;
             case 4 -> 4;
             case 2, 3 -> 3;
@@ -123,6 +152,27 @@ public class BoardService {
                 board[row][column+c] = CellState.SHIP;
             }
         }
+
+        currentShip -= 1;
+        if (activeShip == 1){
+            switchPlayer(playerTurn);
+            currentShip = 5;
+            System.out.println("player turn: " + playerTurn);
+            if (playerTurn == 1){
+                System.out.println("Mode before: "+ currentMode);
+                currentMode = Mode.SHOOTING;
+                System.out.println("Mode after: "+ currentMode);
+
+            }
+        }
         return "Ship placed";
+    }
+
+    public GameStateDto getGameState(){
+        GameStateDto gameStateDto = new GameStateDto();
+        gameStateDto.setCurrentShip(currentShip);
+        gameStateDto.setPlayerTurn(playerTurn);
+        gameStateDto.setCurrentMode(currentMode);
+        return gameStateDto;
     }
 }

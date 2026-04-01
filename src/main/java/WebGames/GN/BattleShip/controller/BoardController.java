@@ -1,6 +1,7 @@
 package WebGames.GN.BattleShip.controller;
 
 import WebGames.GN.BattleShip.CellState;
+import WebGames.GN.BattleShip.dto.GameStateDto;
 import WebGames.GN.BattleShip.dto.PlayerTurnDto;
 import WebGames.GN.BattleShip.dto.ShipPlacementDto;
 import WebGames.GN.BattleShip.service.BoardService;
@@ -34,6 +35,7 @@ public class BoardController {
 
     @PutMapping("/shipPlacement")
     public ResponseEntity<String> placeShipsForSpecificPlayer(@RequestBody ShipPlacementDto shipPlacementDto){
+
         return ResponseEntity.ok(boardService.placementOfShips(shipPlacementDto));
     }
 
@@ -44,6 +46,11 @@ public class BoardController {
 
     @PutMapping("/newGame")
     public void newGame(){
-        boardService.clearAllBoards();
+        boardService.resetGameStateAndBoard();
+    }
+
+    @GetMapping("/state")
+    public ResponseEntity<GameStateDto> getGameState(){
+        return ResponseEntity.ok(boardService.getGameState());
     }
 }
