@@ -68,9 +68,7 @@ public class BoardService {
     }
 
     public CellState setCellStateByPlayer(PlayerTurnDto playerTurnDto){
-        if (playerTurn == playerTurnDto.getPlayerNumber()){
-            throw new RuntimeException("wrong turn");
-        }
+
         int row = playerTurnDto.getRow();
         int column = playerTurnDto.getColumn();
         CellState[][] board = selectBoard(playerTurnDto.getPlayerNumber());
