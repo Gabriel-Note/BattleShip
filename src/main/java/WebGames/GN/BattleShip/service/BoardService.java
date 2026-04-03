@@ -67,16 +67,20 @@ public class BoardService {
         return selectBoard(player);
     }
 
-    public CellState setCellStateByPlayer(PlayerTurnDto playerTurnDto){
-
+    public ResponseEntity<?> setCellStateByPlayer(PlayerTurnDto playerTurnDto){
+        if (playerTurn == playerTurnDto.getPlayerNumber()){
+            return ResponseEntity.badRequest().body("Don't shoot at your own ships");
+        }
         int row = playerTurnDto.getRow();
         int column = playerTurnDto.getColumn();
         CellState[][] board = selectBoard(playerTurnDto.getPlayerNumber());
         CellState cellState = setCellStateByLocation(row, column, board);
         if (cellState != CellState.ALREADY_USED){
             switchPlayer(playerTurn);
+        } else {
+            return ResponseEntity.badRequest().body("You have already fired here");
         }
-        return cellState;
+        return ResponseEntity.ok().body(cellState);
     }
 
     private void switchPlayer(int player){

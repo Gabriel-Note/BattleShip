@@ -19,7 +19,7 @@ public class BoardController {
     }
 
     @PutMapping
-    public CellState fireAtSpecificPlayer(@RequestBody PlayerTurnDto playerTurnDto){
+    public ResponseEntity<?> fireAtSpecificPlayer(@RequestBody PlayerTurnDto playerTurnDto){
         return boardService.setCellStateByPlayer(playerTurnDto);
     }
 
