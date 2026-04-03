@@ -24,7 +24,8 @@ public class BoardService {
     private int playerTurn;
     public int currentShip;
     public Mode currentMode;
-    private int healthOfShips = 17;
+    private int healthOfPlayerOneShips;
+    private int healthOfPlayerTwoShips;
 
     public BoardService() {
         resetGameStateAndBoard();
@@ -36,6 +37,8 @@ public class BoardService {
         playerTurn = 1;
         currentShip = 5;
         currentMode = Mode.PLACEMENT;
+        healthOfPlayerOneShips = 17;
+        healthOfPlayerTwoShips = 17;
     }
 
     public CellState getCellStateByPlayer(PlayerTurnDto playerTurnDto){
@@ -97,11 +100,21 @@ public class BoardService {
             return CellState.MISS;
         }
         else if (currentCell == CellState.SHIP) {
-            healthOfShips -= 1;
-            if (healthOfShips == 0){
-                return CellState.ALL_SHIPS_HIT;
-            }
             board[row][column] = CellState.HIT;
+            switch (playerTurn){
+                case 1:
+                    healthOfPlayerTwoShips -= 1;
+                    if (healthOfPlayerTwoShips == 0){
+                        return CellState.ALL_P2_SHIPS_HIT;
+                    }
+                    break;
+                case 2:
+                    healthOfPlayerOneShips -= 1;
+                    if (healthOfPlayerOneShips == 0){
+                        return CellState.ALL_P1_SHIPS_HIT;
+                    }
+                    break;
+            }
             return CellState.HIT;
         }
         else{
