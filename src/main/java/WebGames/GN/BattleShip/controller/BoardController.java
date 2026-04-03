@@ -36,7 +36,7 @@ public class BoardController {
     @PutMapping("/shipPlacement")
     public ResponseEntity<String> placeShipsForSpecificPlayer(@RequestBody ShipPlacementDto shipPlacementDto){
 
-        return ResponseEntity.ok(boardService.placementOfShips(shipPlacementDto));
+        return boardService.placementOfShips(shipPlacementDto);
     }
 
     @PutMapping("/clearBoard{player}")

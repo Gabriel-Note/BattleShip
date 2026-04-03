@@ -122,9 +122,9 @@ public class BoardService {
         }
     }
 
-    public String placementOfShips(ShipPlacementDto shipPlacementDto) {
+    public ResponseEntity<String> placementOfShips(ShipPlacementDto shipPlacementDto) {
         if (shipPlacementDto.getPlayer() != playerTurn){
-            return "not your turn";
+            return ResponseEntity.badRequest().body("not your turn");
         }
         int row = shipPlacementDto.getRow();
         int column = shipPlacementDto.getColumn();
@@ -142,11 +142,11 @@ public class BoardService {
             for (int r = 0; r < shipSize; r++){
                 try{
                     if (!(board[row+r][column] == CellState.EMPTY)){
-                        return "Placement overlaps with another ship at: [" +
-                                (row+r) + "]:[" + column + "]";
+                        return  ResponseEntity.badRequest().body("Placement overlaps with another ship at: [" +
+                                (row+r) + "]:[" + column + "]");
                     }
                 }catch (IndexOutOfBoundsException e){
-                    return Message.outOfBounds() + ": " + e.getMessage();
+                    return  ResponseEntity.badRequest().body(Message.outOfBounds() + ": " + e.getMessage());
                 }
             }
             for (int r = 0; r < shipSize; r++){
@@ -156,11 +156,11 @@ public class BoardService {
             for (int c = 0; c < shipSize; c++){
                 try{
                     if (!(board[row][column+c] == CellState.EMPTY)){
-                        return "Placement overlaps with another ship at: [" +
-                                row + "]:[" + (column+c) + "]";
+                        return  ResponseEntity.badRequest().body("Placement overlaps with another ship at: [" +
+                                row + "]:[" + (column+c) + "]");
                     }
                 }catch (IndexOutOfBoundsException e){
-                    return Message.outOfBounds() + ": " + e.getMessage();
+                    return  ResponseEntity.badRequest().body(Message.outOfBounds() + ": " + e.getMessage());
                 }
             }
             for (int c = 0; c < shipSize; c++){
@@ -180,7 +180,7 @@ public class BoardService {
 
             }
         }
-        return "Ship placed";
+        return  ResponseEntity.ok().body("Ship placed");
     }
 
     public GameStateDto getGameState(){
